@@ -24,7 +24,7 @@ dependencies = [
     "loguru",
     "click",
     "python-dotenv",
-
+    "numpy>=2.0.2",
 ]
 
 [project.urls]
@@ -125,4 +125,3 @@ skip_empty = true
 [tool.coverage.run]
 branch = true
 source = ["src"]
-
