@@ -1,0 +1,52 @@
+site_name: ml-template
+repo_url: https://github.com/nealgravindra/ml-template
+site_url: https://nealgravindra.github.io/ml-template
+site_description: This is a template repository for ML projects that use uv for their dependency management.
+site_author: Neal G. Ravindra
+edit_uri: edit/main/docs/
+repo_name: nealgravindra/ml-template
+copyright: Maintained by <a href="https://nealgravindra.com">nealgravindra</a>.
+
+nav:
+  - Home: index.md
+  - Modules: modules.md
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: ["src/ml_template"]
+theme:
+  name: material
+  feature:
+    tabs: true
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/nealgravindra/ml-template
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/ml-template
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true

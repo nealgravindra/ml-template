@@ -1,0 +1,16 @@
+defaults:
+  - _self_
+
+seed: 1337
+
+train:
+  epochs: 1
+  batch_size: 256
+  lr: 3e-4
+  l1: 1.0e-3
+  l2: 1.0e-3
+
+data:
+  n_samples: 4096
+  n_features: 256
+  noise: 0.1
