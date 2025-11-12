@@ -20,10 +20,7 @@ classifiers = [
 dependencies = [
     "torch",
     "hydra-core",
-    "wandb",
-    "loguru",
     "click",
-    "python-dotenv",
     "numpy>=2.0.2",
 ]
 
