@@ -4,6 +4,7 @@ import shutil
 import subprocess
 from enum import StrEnum
 from pathlib import Path
+from shutil import which
 
 
 class Colors(StrEnum):
@@ -22,10 +23,11 @@ class Colors(StrEnum):
 
 def setup_uv_environment() -> None:
     """Set up the UV environment and install dependencies for the project."""
+    project_dir = Path()
+    uv = which("uv") or "uv"
     try:
-        subprocess.run(["cd", "{{cookiecutter.project_name}}"], shell=True, check=False)
-        subprocess.run(["uv", "venv"], check=False)
-        subprocess.run(["uv", "sync"], check=False)
+        subprocess.run([uv, "venv"], cwd=project_dir, check=False)
+        subprocess.run([uv, "sync"], cwd=project_dir, check=False)
     except Exception as e:
         print(f"UV Setup Error: {e}")
 
@@ -50,35 +52,41 @@ def remove(filepath: str) -> None:
 
 def prune_unwanted_files() -> None:
     """Remove unwanted files and directories from the project."""
-    if "{{cookiecutter.include_docs}}" != "y":
+    include_docs = "{{cookiecutter.include_docs}}" == "y"
+    include_docker = "{{cookiecutter.include_docker}}" == "y"
+    include_changelog = "{{cookiecutter.include_changelog}}" == "y"
+    include_citation = "{{cookiecutter.include_citation}}" == "y"
+    include_contrib = "{{cookiecutter.include_contributing_guide}}" == "y"
+    include_code_of_conduct = "{{cookiecutter.include_code_of_conduct}}" == "y"
+    include_pypi = "{{cookiecutter.pypi_deploy}}" == "y"
+    include_dbot = "{{cookiecutter.include_dbot}}" == "y"
+
+    if not include_docs:
         remove("docs")
 
-    if "{{cookiecutter.include_nox}}" != "y":
-        remove("noxfile.py")
-
-    if "{{cookiecutter.include_docker}}" != "y":
+    if not include_docker:
         remove("Dockerfile")
         remove(".dockerignore")
 
-    if "{{cookiecutter.include_changelog}}" != "y":
+    if not include_changelog:
         remove("CHANGELOG.md")
 
-    if "{{cookiecutter.include_citation}}" != "y":
+    if not include_citation:
         remove("CITATION.cff")
 
-    if "{{cookiecutter.include_contributing_guide}}" != "y":
+    if not include_contrib:
         remove("CONTRIBUTING.md")
 
-    if "{{cookiecutter.include_code_of_conduct}}" != "y":
+    if not include_code_of_conduct:
         remove("CODE_OF_CONDUCT.md")
 
-    if "{{cookiecutter.pypi_deploy}}" != "y":
+    if not include_pypi:
         remove(".github/workflows/pypi-publish.yml")
 
-    if "{{cookiecutter.include_dbot}}" != "y":
+    if not include_dbot:
         remove(".github/dependabot.yml")
 
-    if "{{cookiecutter.include_dbot}}" != "y":
+    if not include_dbot:
         remove(".github/release-drafter.yml")
         remove(".github/workflows/release-publish.yml")
         remove(".github/workflows/release-drafter.yml")
@@ -86,10 +94,11 @@ def prune_unwanted_files() -> None:
 
 def setup_git() -> None:
     """Initialize a git repository and set up the initial commit."""
+    git = which("git") or "git"
     try:
-        subprocess.run(["git", "init", "-b", "main"], check=False)
-        subprocess.run(["git", "add", "."], check=False)
-        subprocess.run(["git", "commit", "-m", "Initial commit"], check=False)
+        subprocess.run([git, "init", "-b", "main"], check=False)
+        subprocess.run([git, "add", "."], check=False)
+        subprocess.run([git, "commit", "-m", "Initial commit"], check=False)
     except Exception as e:
         print(f"Git Setup Error: {e}")
 
@@ -97,6 +106,7 @@ def setup_git() -> None:
 def display_project_details() -> None:
     """Display the project details after setup."""
     project_path = Path.cwd()
+    include_docs = "{{cookiecutter.include_docs}}" == "y"
     print(
         "\n\n###################################################################\n",
     )
@@ -109,7 +119,7 @@ def display_project_details() -> None:
     print(
         f"Git URL: {Colors.CYAN}https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.repository_name}}{Colors.ENDC}",
     )
-    if "{{cookiecutter.include_docs}}" == "y":
+    if include_docs:
         print(
             f"Documentation: {Colors.CYAN}https://{{cookiecutter.github_username}}.github.io/{{cookiecutter.repository_name}}{Colors.ENDC}",
         )

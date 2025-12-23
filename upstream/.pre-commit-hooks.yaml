@@ -7,12 +7,13 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: check-json
-        exclude: ^{{cookiecutter.project_name}}/
+        # Skip template render targets; Jinja makes them invalid TOML/JSON until rendered.
+        exclude: (^|.*/)(\{\{cookiecutter\.project_name\}\}|\{\{cookiecutter\.__clean_name\}\})/
         args: [--autofix, --no-sort-keys]
       - id: check-toml
-        exclude: ^{{cookiecutter.project_name}}/
+        exclude: (^|.*/)(\{\{cookiecutter\.project_name\}\}|\{\{cookiecutter\.__clean_name\}\})/
       - id: check-yaml
-        exclude: ^{{cookiecutter.project_name}}/
+        exclude: (^|.*/)(\{\{cookiecutter\.project_name\}\}|\{\{cookiecutter\.__clean_name\}\})/
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: "v0.11.13"

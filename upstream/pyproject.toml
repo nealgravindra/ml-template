@@ -21,13 +21,17 @@ classifiers = [
 ]
 
 dependencies = [
-  "cookiecutter>=2.1.1"
+  "cookiecutter>=2.1.1",
+  "torch",
+  "polars",
+  "wandb",
+  "click",
+  "loguru",
 ]
 
 [dependency-groups]
 dev = [
-    "nox>=2025.5.1",
-    "mypy >=1.16.1",
+    "ty>=0.0.1a11",
     "pytest>=8.4.1",
     "pytest-cookies>=0.7.0",
     "ruff>=0.12.0",
@@ -52,9 +56,8 @@ Issues = "https://github.com/wyattferguson/pattern/issues"
 [tool.taskipy.tasks]
 format = { cmd = "ruff format ./src/", help = "Format code using ruff" }
 lint = { cmd = "ruff check --fix ./src/", help = "Lint code using ruff" }
-type = { cmd = "mypy --strict ./tests/", help = "Typecheck code using mypy" }
+type = { cmd = "ty check", help = "Typecheck code using ty" }
 tests = { cmd = "pytest --color=yes tests", help = "Run all tests using pytest" }
-nox = { cmd = "nox -s tests", help = "Run tests in a nox session" }
 docs = { cmd = "mkdocs build", help = "Build documentation using mkdocs" }
 serve = { cmd = "mkdocs serve", help = "Serve documentation using mkdocs" }
 publish = { cmd = "mkdocs gh-deploy", help = "Publish documentation to GitHub Pages" }
@@ -86,15 +89,12 @@ ignore = [
     "D205", # line-between-summary-and-description
     "D212", # multi-line-summary-first-line
     "D407", # missing-dashed-underline-after-section
-    "S311", # rand-usage
+    "S311", # rand-usage,
+    "S603", # subprocess warn_unused_ignores
+    "PLR0133", # cookiecutter jinja complaints
 ]
 
-[tool.mypy]
-files = ["tests","hooks"]
-disallow_untyped_defs = true
-disallow_any_unimported = true
-no_implicit_optional = true
-check_untyped_defs = true
-warn_return_any = true
-warn_unused_ignores = true
-show_error_codes = true
+[tool.ty]
+src.root = "."
+environment.python = "./.venv"
+terminal.output-format = "concise"
