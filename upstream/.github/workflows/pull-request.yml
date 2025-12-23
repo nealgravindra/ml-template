@@ -1,0 +1,15 @@
+name: "PR Title Enforcement"
+on:
+  pull_request:
+    types: [edited, opened, synchronize, reopened]
+
+jobs:
+  title-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: naveenk1223/action-pr-title@master
+        with:
+          regex: ".*(feat|fix|docs|style|refactor|perf|test|build|ci|revert|deps).*"
+          allowed_prefixes: ""  # or remove this input
+          min_length: 5 # Min length of the title
+          max_length: 120 # Max length of the title

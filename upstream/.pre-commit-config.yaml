@@ -1,0 +1,48 @@
+exclude: "(\\{\\{cookiecutter\\.|\\}\\})"
+default_stages: [push]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v5.0.0"
+    hooks:
+      - id: check-case-conflict
+        stages: [push]
+      - id: check-merge-conflict
+        stages: [push]
+      - id: end-of-file-fixer
+        stages: [push]
+      - id: trailing-whitespace
+        stages: [push]
+      - id: check-json
+        args: [--autofix, --no-sort-keys]
+        stages: [push]
+      - id: check-toml
+        files: "^pyproject\\.toml$"
+        stages: [push]
+      - id: check-yaml
+        stages: [push]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.11.13"
+    hooks:
+      - id: ruff-check
+        args: [--fix --config=pyproject.toml]
+        stages: [push]
+      - id: ruff-format
+        args: [--config=pyproject.toml]
+        stages: [push]
+
+  - repo: local
+    hooks:
+      - id: project-quality
+        name: Run lint, type-check, and tests before push
+        language: system
+        entry: bash -c "uv run task lint && uv run task type && uv run task tests"
+        pass_filenames: false
+        stages: [push]
+      - id: docs-build
+        name: Build docs when docs change
+        language: system
+        entry: bash -c "uv run task docs"
+        files: "^(docs/|mkdocs\\.yml)"
+        pass_filenames: false
+        stages: [push]
